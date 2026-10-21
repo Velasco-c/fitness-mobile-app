@@ -1,0 +1,143 @@
+/* ==========================================================
+   LEVELS · pantalla Select activity como mapa de niveles
+   ========================================================== */
+.screen-activity {
+  background: radial-gradient(120% 60% at 50% 0%, #1d4656 0%, #0c1822 48%, #06090d 100%);
+}
+
+/* Cabecera */
+.hub-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 4px 14px; }
+.hub-head h2 { font-size: 20px; font-weight: 600; }
+
+/* Progreso del mundo */
+.world-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  backdrop-filter: blur(12px);
+}
+.world-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.world-kicker { font-size: 15px; font-weight: 600; color: var(--mint); }
+.stars-count { font-weight: 700; color: var(--green); }
+.xp { height: 10px; border-radius: 5px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.xp-fill {
+  height: 100%;
+  width: var(--p);
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--green), var(--cyan));
+  box-shadow: 0 0 12px rgba(182, 242, 60, 0.5);
+  transition: width 1s var(--ease);
+}
+.world-card small { display: block; margin-top: 8px; font-size: 13px; color: var(--muted); }
+
+/* Tarjeta del nivel seleccionado */
+.level-card {
+  background: linear-gradient(160deg, rgba(182, 242, 60, 0.14), rgba(20, 30, 38, 0.85));
+  border: 1px solid rgba(182, 242, 60, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 18px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+.level-card.is-locked { border-color: rgba(255, 255, 255, 0.12); background: rgba(20, 24, 30, 0.85); }
+.level-card h3 { font-size: 26px; margin: 10px 0 4px; }
+.level-card p { font-size: 15px; }
+.level-card .stars { display: flex; justify-content: center; margin-top: 8px; }
+
+.pips { display: flex; justify-content: center; gap: 6px; }
+.pips i { width: 10px; height: 10px; border-radius: 50%; background: #2a3038; }
+.pips i.on { background: var(--green); }
+
+.chip {
+  margin: 12px auto 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: rgba(90, 174, 224, 0.14);
+  color: var(--oura-blue);
+  font-size: 14px;
+}
+
+.play-btn {
+  width: 100%;
+  height: 58px;
+  margin-top: 16px;
+  border-radius: 29px;
+  background: var(--green);
+  color: #000;
+  font-size: 19px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(182, 242, 60, 0.35);
+  transition: transform 0.2s;
+}
+.play-btn:active { transform: scale(0.97); }
+.play-btn:disabled { background: #2a2f38; color: #6b7380; box-shadow: none; cursor: not-allowed; }
+
+/* Estrellas */
+.stars { display: inline-flex; gap: 6px; }
+.star { width: 20px; height: 20px; color: #3a404a; fill: currentColor; }
+.star.on { color: var(--green); }
+.stars.sm { gap: 3px; }
+.stars.sm .star { width: 12px; height: 12px; }
+
+/* Mapa de niveles */
+.level-map { position: relative; margin: 0 4px; }
+.level-path { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.level-path path {
+  fill: none;
+  stroke: rgba(182, 242, 60, 0.45);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 2 10;
+}
+
+.level-node {
+  position: absolute;
+  width: 150px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.node-core {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 2px solid transparent;
+  transition: transform 0.25s var(--ease);
+}
+.node-core svg { width: 30px; height: 30px; }
+.level-node:active .node-core { transform: scale(0.94); }
+
+.level-node.done .node-core { background: rgba(182, 242, 60, 0.14); border-color: var(--green); color: var(--green); }
+.level-node.current .node-core {
+  background: var(--green);
+  border-color: #fff;
+  color: #000;
+  animation: pulse 1.8s infinite;
+}
+.level-node.locked .node-core { background: #171b21; border-color: #2b313b; color: #5b6470; }
+.level-node.sel .node-core { transform: scale(1.08); outline: 2px solid #fff; outline-offset: 4px; }
+
+.node-name {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #e6ecef;
+  text-shadow: 0 1px 6px #000;
+}
+.level-node.locked .node-name { color: #6b7380; }
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(182, 242, 60, 0.55); }
+  70% { box-shadow: 0 0 0 18px rgba(182, 242, 60, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(182, 242, 60, 0); }
+}

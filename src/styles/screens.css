@@ -1,0 +1,41 @@
+/* ==========================================================
+   PANTALLAS · fondos y layouts específicos de cada pantalla
+   ========================================================== */
+
+/* Fondo por pantalla (la clase la añade Shell en App.tsx) */
+.screen-summary, .screen-profile { background: #000; }
+.screen-opal { background: radial-gradient(130% 55% at 50% 0%, #1f3d33 0%, #07100c 42%, #000 70%); }
+.screen-activity { background: linear-gradient(180deg, var(--oura-top) 0%, var(--oura-bottom) 46%, #15181c 100%); }
+
+/* Summary */
+.head-actions { display: flex; gap: 10px; align-items: center; }
+.ring-row .label { display: block; }
+
+/* Opal */
+.opal-top { display: flex; align-items: center; justify-content: space-between; padding: 8px 6px 0; }
+.circle-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.day-nav { display: flex; align-items: center; gap: 18px; font-size: 20px; font-weight: 600; }
+.day-nav span { min-width: 110px; text-align: center; }
+.chev { width: 34px; height: 34px; display: grid; place-items: center; color: #c7c7cc; }
+.chev:disabled { opacity: 0.25; cursor: default; }
+.flip { transform: rotate(180deg); }
+.desc { margin-top: 40px; padding: 0 10px; }
+.desc h2 { margin-bottom: 10px; }
+.desc p { font-size: 19px; line-height: 1.5; color: #9a9ea6; }
+.metrics { margin-top: 34px; padding: 0 10px; display: flex; flex-direction: column; gap: 30px; }
+
+/* Activity */
+
+/* Profile */
+.profile-card { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 8px; text-align: center; }
+.profile-card h3 { font-size: 24px; }
+.goal { color: var(--green); font-weight: 600; }
+.register { margin-top: 8px; }
