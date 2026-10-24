@@ -15,6 +15,7 @@ import './styles/panels.css';
 import './styles/profile.css';
 import './styles/welcome.css';
 import './styles/water.css';
+import './styles/sheets.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

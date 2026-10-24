@@ -1,16 +1,65 @@
 {
-  "world": "Mundo 1",
-  "stars": 5,
-  "maxStars": 18,
-  "xp": 340,
-  "xpNext": 500,
   "movementSource": "Cámara frontal",
-  "levels": [
-    { "id": "n1", "number": 1, "title": null, "pattern": null, "difficulty": 1, "stars": 3, "status": "done" },
-    { "id": "n2", "number": 2, "title": null, "pattern": null, "difficulty": 1, "stars": 2, "status": "done" },
-    { "id": "n3", "number": 3, "title": null, "pattern": null, "difficulty": 2, "stars": 0, "status": "current" },
-    { "id": "n4", "number": 4, "title": null, "pattern": null, "difficulty": 2, "stars": 0, "status": "locked" },
-    { "id": "n5", "number": 5, "title": "Sentadilla del Gigante", "pattern": "sentadilla", "difficulty": 1, "stars": 0, "status": "locked" },
-    { "id": "n6", "number": 6, "title": null, "pattern": null, "difficulty": 3, "stars": 0, "status": "locked" }
+  "categories": [
+    {
+      "id": "fuerza", "name": "Fuerza", "subtitle": "Mundo 1", "tone": "blue",
+      "levels": [
+        {"title": null, "pattern": null, "difficulty": 1, "stars": 3},
+        {"title": null, "pattern": null, "difficulty": 1, "stars": 2},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": "Sentadilla del Gigante", "pattern": "sentadilla", "difficulty": 1, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0}
+      ]
+    },
+    {
+      "id": "equilibrio", "name": "Equilibrio", "subtitle": "Mundo 2", "tone": "green",
+      "levels": [
+        {"title": null, "pattern": null, "difficulty": 1, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 1, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 1, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 1, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0}
+      ]
+    },
+    {
+      "id": "cardio", "name": "Cardio", "subtitle": "Mundo 3", "tone": "orange",
+      "levels": [
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 2, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0},
+        {"title": null, "pattern": null, "difficulty": 3, "stars": 0}
+      ]
+    }
   ]
 }

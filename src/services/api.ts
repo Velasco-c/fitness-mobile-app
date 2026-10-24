@@ -1,6 +1,7 @@
 import type {
-  AppNotification, LevelsData, ProfileData, SummaryData, UserProfile, WaterData,
+  AchievementDef, AppNotification, LevelsData, ProfileData, SummaryData, UserProfile, WaterConfig,
 } from '../types';
+import { checkLevels } from '../utils/levels';
 
 /**
  * Backend simulado. Lee los JSON de public/data/ con una pequeña latencia,
@@ -51,8 +52,9 @@ export const api = {
   },
 
   summary: () => fetchJson<SummaryData>('summary'),
-  levels: () => fetchJson<LevelsData>('levels'),
+  levels: async () => checkLevels(await fetchJson<LevelsData>('levels')),
   profile: () => fetchJson<ProfileData>('profile'),
-  water: () => fetchJson<WaterData>('water'),
+  achievements: async () => (await fetchJson<{ achievements: AchievementDef[] }>('achievements')).achievements,
+  water: () => fetchJson<WaterConfig>('water'),
   notifications: () => fetchJson<AppNotification[]>('notifications', 200),
 };

@@ -1,4 +1,5 @@
 import type { Level } from '../types';
+import { DIFFICULTY_LABEL } from '../config/labels';
 import { Icon } from './Icons';
 
 const ROW = 120;      // altura de cada nivel (px)
@@ -33,7 +34,7 @@ interface LevelMapProps {
   onSelect: (id: string) => void;
 }
 
-/** Mapa de niveles: nodos conectados por un camino, estilo selector de niveles de juego. */
+/** Mapa de niveles de una categoría: nodos conectados por un camino. La insignia de color indica la dificultad. */
 export function LevelMap({ levels, selectedId, onSelect }: LevelMapProps) {
   const height = levels.length * ROW;
   const path = levels
@@ -53,11 +54,15 @@ export function LevelMap({ levels, selectedId, onSelect }: LevelMapProps) {
           style={{ left: `${xAt(i) * 100}%`, top: i * ROW + ROW / 2 - 36 }}
           onClick={() => onSelect(l.id)}
           aria-pressed={l.id === selectedId}
+          aria-label={`Nivel ${l.number}${l.title ? `, ${l.title}` : ''}, ${DIFFICULTY_LABEL[l.difficulty]}`}
         >
-          <span className="node-core">
-            {l.status === 'locked' && <Icon name="lock" size={30} />}
-            {l.status === 'done' && <Icon name="check" size={30} />}
-            {l.status === 'current' && <span className="node-num">{l.number}</span>}
+          <span className="node-wrap">
+            <span className="node-core">
+              {l.status === 'locked' && <Icon name="lock" size={30} />}
+              {l.status === 'done' && <Icon name="check" size={30} />}
+              {l.status === 'current' && <span className="node-num">{l.number}</span>}
+            </span>
+            <span className={`node-badge diff-${l.difficulty}`} aria-hidden="true" />
           </span>
           <span className="node-name">Nivel {l.number}</span>
           {l.status !== 'locked' && <Stars count={l.stars} small />}

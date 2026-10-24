@@ -1,38 +1,9 @@
 {
-  "goalMl": 2000,
-  "glassMl": 250,
-  "amounts": [
-    150,
-    250,
-    500
-  ],
-  "reminderHours": 2,
-  "intakes": [
-    {
-      "id": "w1",
-      "time": "07:15",
-      "ml": 250
-    },
-    {
-      "id": "w2",
-      "time": "09:40",
-      "ml": 250
-    },
-    {
-      "id": "w3",
-      "time": "11:30",
-      "ml": 250
-    },
-    {
-      "id": "w4",
-      "time": "13:05",
-      "ml": 250
-    },
-    {
-      "id": "w5",
-      "time": "15:20",
-      "ml": 250
-    }
-  ],
-  "confirmedToday": 1
+  "goalGlasses": 8,
+  "goalMin": 4,
+  "goalMax": 12,
+  "suggestedGlasses": 8,
+  "wake": "07:00",
+  "sleep": "20:00",
+  "amounts": [1, 2]
 }

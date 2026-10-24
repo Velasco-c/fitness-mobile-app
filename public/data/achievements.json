@@ -1,0 +1,39 @@
+{
+  "achievements": [
+    {
+      "id": "primer-nivel",
+      "title": "Primer nivel",
+      "detail": "Completa tu primer nivel",
+      "tone": "gray",
+      "rule": { "type": "levelsDone", "count": 1 }
+    },
+    {
+      "id": "racha-3",
+      "title": "Racha de 3",
+      "detail": "Entrena 3 días seguidos",
+      "tone": "navy",
+      "rule": { "type": "streak", "count": 3 }
+    },
+    {
+      "id": "agua-pura",
+      "title": "Agua pura",
+      "detail": "Cumple tu meta de agua un día",
+      "tone": "teal",
+      "rule": { "type": "waterGoalDays", "count": 1 }
+    },
+    {
+      "id": "estrella-doble",
+      "title": "Estrella doble",
+      "detail": "Consigue 10 estrellas",
+      "tone": "red",
+      "rule": { "type": "stars", "count": 10 }
+    },
+    {
+      "id": "sin-pausas",
+      "title": "Sin pausas",
+      "detail": "Completa una categoría entera",
+      "tone": "pink",
+      "rule": { "type": "categoriesDone", "count": 1 }
+    }
+  ]
+}

@@ -11,9 +11,9 @@ Interfaz móvil (React + TypeScript + CSS) para KidFit, construida sobre el temp
   - Meta diaria de **niveles completados** (sustituye la meta de calorías).
   - Tarjetas Logros y Entrenos, y «Niveles realizados».
   - Pasos y distancia eliminados.
-- **Niveles** (pestaña Niveles): mapa de niveles con el mismo componente del template, con el nivel 5 de KidFit («Sentadilla del Gigante», de `nivel05_sentadilla.json`).
-- **Hoy**: vaso animado con las tomas del día, barra de lo que falta para la meta, botón grande con gota para confirmar recordatorios (con animación), tomas del día y medidor de porcentaje consumido al final. Los datos vienen de `public/data/water.json`.
-- **Perfil** (estilo perfil.png): foto, logros en anillos, calendario de la semana, botón de tienda, avatares y selector de apariencia.
+- **Niveles** (pestaña Niveles): primero se elige la categoría (tarjetas deslizables con su progreso). Al entrar, un mapa con sus niveles, cada uno con su dificultad (verde fácil, naranja normal, rojo difícil).
+- **Hoy** (hidratación en vasos): la meta la elige el niño (4 a 12 vasos). Cada recordatorio equivale a un vaso y se reparte entre la hora de despertar y la de dormir. Para sumar agua hay que confirmar primero un recordatorio que ya sonó; no se puede pasar de la meta y «Deshacer» quita la última toma. Al cumplir la meta aparece la insignia. Ver «Hidratación» más abajo.
+- **Perfil** (estilo perfil.png): foto, logros en anillos, calendario de la semana, avatares, apariencia claro/oscuro y cerrar sesión.
 - **Bienvenida** tras iniciar sesión (cuenta u offline): animación del monito que cae, salta y expande la pantalla.
 - Barra de navegación igual que en el template.
 
@@ -59,20 +59,73 @@ Son la base del sistema de diseño de KidFit. Esta versión añade a `theme.css`
 
 | Archivo | Qué controla |
 |---|---|
-| `data/levels.ts` | Niveles, dificultad, estrellas, progreso del mundo |
-| `data/summary.ts` | Meta diaria de niveles (`levelsToday` / `goal`) |
-| `data/user.ts` | Usuario de ejemplo del botón LOG IN |
-| `data/notifications.ts` | Notificaciones iniciales |
-| `data/goals.ts` | Opciones de «Meta» del registro |
+| `public/data/levels.json` | Categorías, niveles, dificultad, estrellas y cámara |
+| `public/data/water.json` | Meta inicial, límites, horario de recordatorios y tamaños de toma (en vasos) |
+| `public/data/summary.json` | Meta diaria de niveles (`goal`) |
+| `public/data/profile.json` | Avatar y color de partida (`defaultAvatar`, `defaultTone`), lista de ilustraciones (`id`, `tone`, `src`) y días de actividad de partida (`seedActiveDays`) |
+| `public/data/achievements.json` | Logros: título, descripción, color del anillo y regla que los desbloquea |
+| `public/data/users.json` | Usuarios de ejemplo del acceso |
+| `public/data/notifications.json` | Notificaciones iniciales |
+| `src/config/features.ts` | Funciones opcionales (perfil, meta en el registro) |
+| `src/data/goals.ts` | Opciones de «Meta» del registro |
+
+## Niveles y categorías
+
+Todo sale de `public/data/levels.json`. Se edita sin recompilar: guarda el archivo y recarga la página.
+
+- **Categoría**: `id` único, `name`, `subtitle` (p. ej. «Mundo 1»), `tone` (`blue`, `green`, `orange`, `teal`, `pink`, `indigo` o `slate`) y su lista `levels`.
+- **Nivel**: una línea con `title` (`null` muestra «Por definir»), `pattern` (clave del movimiento, o `null`), `difficulty` (1 fácil, 2 normal, 3 difícil) y `stars` (0 a 3).
+
+Para añadir un nivel, copia una línea dentro de `levels` de la categoría. El número y el orden se calculan solos. Un nivel con estrellas está completado; el primero sin estrellas es el actual, y los siguientes quedan bloqueados. Para añadir una categoría, copia un bloque completo dentro de `categories`. `movementSource` es el texto del nivel («Cámara frontal»).
+
+Si el JSON tiene un error (categoría repetida, sin niveles o dificultad fuera de 1–3), la pestaña muestra el motivo en vez de fallar.
+
+## Progreso guardado
+
+Hidratación, niveles jugados, racha y recordatorios se guardan en el navegador (`localStorage`, clave `kidfit.progress.v1`). La primera vez se siembran desde los JSON: meta de `water.json`, niveles con estrellas de `levels.json` y días de actividad de `profile.json`. Después, el progreso manda sobre los JSON.
+
+- **Racha**: días seguidos con actividad. Cuenta como actividad terminar un nivel o cumplir la meta de agua. Si hoy todavía no tiene actividad, la racha sigue desde ayer.
+- **Estrellas de un nivel**: la mejor marca entre `levels.json` y lo jugado.
+- **Modo prueba**: «Terminar nivel» pide las estrellas a mano hasta conectar la cámara. Para reiniciar todo, borra `kidfit.progress.v1` en las herramientas del navegador.
+
+## Logros y avatar
+
+- **Logros**: se editan en `achievements.json`. Cada logro tiene una regla:
+  - `levelsDone` (niveles terminados), `stars` (estrellas totales), `streak` (racha de días), `waterGoalDays` (días con la meta de agua cumplida) y `categoriesDone` (categorías completas).
+  - El progreso se calcula solo. Al cumplirse, el logro se guarda con su fecha y aparece un aviso. Una vez desbloqueado, se queda aunque la racha se corte.
+  - Para añadir un logro: copia un bloque, cambia `id`, textos, `tone` y `rule`.
+- **Avatar**: al tocar una ilustración en el perfil, el círculo y el encabezado toman su color. Las ilustraciones son `public/img/avatars/a1.png` a `a6.png` (recortadas en círculo) y su color sale de `profile.json`.
+- **Lápiz**: abre «Editar perfil». Ahí se puede subir una foto propia (se recorta en cuadrado), quitarla para dejar solo el color, o cambiar el color de fondo con los círculos de colores.
+- **Nombre y correo**: no se editan aquí.
+- **Notificaciones**: se borran deslizando la fila a un lado, como en Gmail. Si no se desliza lo suficiente, vuelve a su sitio.
+- **Nombre y correo**: vienen de la cuenta (`users.json`) y no cambian al elegir avatar.
+
+## Hidratación
+
+- **Meta**: se cambia tocando «Cambiar» junto a la meta. El texto de la hoja explica cada cuánto sonará el recordatorio y el equivalente aproximado en litros.
+- **Recordatorios**: `(hora de dormir − hora de despertar) / meta`, redondeado a 5 min hacia abajo. Con 8 vasos entre 07:00 y 20:00, cada 1 h 35 min.
+- **Estados**: «Llega a las…» (espera), «¡Ya toca!» (suena), «Confirmado» (ya puedes sumar el vaso) y «Meta lista».
+- **Tamaños**: `amounts` en `water.json` (por defecto 1 y 2 vasos). Si añades tamaños que no sumen para llegar a la meta, el niño podría no alcanzarla.
+- **Probar recordatorio**: botón dentro de la hoja de meta. Hace que suene el siguiente recordatorio. Se apaga con `demoReminder` en `features.ts`.
+
+## Funciones opcionales
+
+`src/config/features.ts` activa o desactiva funciones:
+
+- `profile`: pestaña Perfil (encendida).
+- `registerGoal`: campo «Meta» en el registro (apagado).
+- `demoReminder`: botón «Probar recordatorio» (encendido, para pruebas).
+
+Si apagas `profile`, la pestaña Perfil desaparece de la barra y «Cerrar sesión» queda al final de Inicio.
 
 ## Pendiente antes de migrar a KidFit
 
-1. **Niveles.** Solo el nivel 5 tiene nombre y patrón. Los demás aparecen como «Por definir».
+1. **Niveles.** Cada categoría trae 15 niveles de ejemplo. Solo «Sentadilla del Gigante» tiene nombre y patrón; los demás aparecen como «Por definir».
 3. **Metas del registro.** Movimiento, Descanso y Enfoque son del template. Falta definir las metas de KidFit.
 4. **Tarjeta Entrenos.** Se conservó del template con su texto vacío. Confirmar si se queda.
 5. **Tipografía.** El mockup convierte el texto en trazos, así que la familia es de sistema. Falta la fuente real.
 6. **Contraste.** El texto de error y «Cerrar sesión» usan el rojo de marca, que tiene poco contraste sobre fondo claro y oscuro (ver el README de tokens de KidFit).
-7. **Persistencia.** La sesión no se guarda: al recargar vuelve el acceso. Solo el tema se recuerda en el navegador.
+7. **Persistencia.** El progreso (agua, niveles, racha, logros y avatar) sí se guarda en el navegador. Es por dispositivo, no por cuenta: si entran dos cuentas en el mismo navegador comparten progreso. La sesión no: al recargar vuelve el acceso. Cuando haya backend, hay que mover el progreso a él (la lógica está en `utils/progress.ts` y el estado en `context/ProgressContext.tsx`).
 
 ## Publicar en GitHub Pages
 

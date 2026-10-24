@@ -1,0 +1,106 @@
+/* ==========================================================
+   HOJAS INFERIORES (meta de agua, terminar nivel) y estados de hidratación
+   ========================================================== */
+
+.kf-sheet-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  background: color-mix(in srgb, var(--kf-gray-600) 45%, transparent);
+  animation: sheet-fade 0.25s var(--kf-ease) both;
+}
+.kf-sheet {
+  width: 100%;
+  padding: 22px 20px 34px;
+  background: var(--kf-surface);
+  color: var(--kf-text);
+  border-radius: var(--kf-radius-xl) var(--kf-radius-xl) 0 0;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.18);
+  animation: sheet-up 0.35s var(--kf-ease) both;
+}
+.kf-sheet h3 { font-size: 22px; font-weight: 600; margin: 4px 0 6px; }
+
+@keyframes sheet-fade { from { opacity: 0; } }
+@keyframes sheet-up { from { transform: translateY(40px); opacity: 0; } }
+
+/* Meta de agua: contador de vasos */
+.goal-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 18px 0 12px;
+}
+.goal-step button {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--kf-brand);
+  color: var(--kf-on-brand);
+}
+.goal-step button:disabled { opacity: 0.35; }
+.goal-step p { font-size: 20px; color: var(--kf-text-secondary); }
+.goal-step p b { font-size: 44px; font-weight: 600; color: var(--kf-text); margin-right: 6px; }
+
+.goal-drops {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  min-height: 24px;
+  color: var(--kf-brand);
+}
+.goal-plan { margin: 16px 0 18px; font-size: 15px; line-height: 1.4; color: var(--kf-text-secondary); }
+.goal-plan b { color: var(--kf-brand); }
+
+/* Terminar nivel (modo prueba hasta conectar la cámara) */
+.star-choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0 8px; }
+.star-choice {
+  height: 84px;
+  border-radius: var(--kf-radius-lg);
+  background: var(--kf-bg-subtle);
+  display: grid;
+  place-items: center;
+}
+.star-choice .star { width: 24px; height: 24px; }
+.star-choice:active { transform: scale(0.97); }
+
+/* Estados bloqueados de hidratación */
+.water-add:disabled,
+.amount:disabled,
+.remind-btn:disabled { opacity: 0.45; cursor: default; }
+
+.remind-btn.due { animation: due-pulse 1.6s infinite; }
+@keyframes due-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--kf-brand) 45%, transparent); }
+  70% { box-shadow: 0 0 0 14px transparent; }
+}
+
+.water-lock {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--kf-text-muted);
+}
+
+/* Tarjeta «Meta de hoy» del panel: se puede tocar */
+.tile[role="button"] { cursor: pointer; }
+
+/* ---------- Editar perfil: vista previa, acciones y colores ---------- */
+.edit-preview { display: flex; justify-content: center; margin: 14px 0 6px; }
+.edit-actions { display: grid; gap: 4px; margin-top: 8px; }
+.edit-actions .btn-primary { margin: 8px 0 4px; }
+.edit-label { font-size: 15px; font-weight: 600; margin: 18px 0 10px; color: var(--kf-text-secondary); }
+.swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; justify-items: center; }
+.swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--tone);
+  transition: transform 0.2s var(--kf-ease);
+}
+.swatch:active { transform: scale(0.9); }
+.swatch.on { box-shadow: 0 0 0 3px var(--kf-surface), 0 0 0 5px var(--kf-brand); }

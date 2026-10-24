@@ -81,3 +81,29 @@
   background: var(--kf-brand);
   vertical-align: middle;
 }
+
+/* ---------- Notificaciones que se borran deslizando (como Gmail) ---------- */
+.notif-row {
+  position: relative;
+  overflow: hidden;
+  animation: enter 0.4s var(--kf-ease) both;
+}
+.notif-undo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--kf-danger);
+  color: var(--kf-on-danger);
+}
+.notif-fg {
+  position: relative;
+  background: var(--kf-bg);
+  animation: none;
+  touch-action: pan-y;
+  user-select: none;
+  transition: transform 0.2s var(--kf-ease);
+}
+.notif-fg.dragging { transition: none; cursor: grabbing; }
+.notif-empty { padding: 24px 6px; color: var(--kf-text-muted); text-align: center; }

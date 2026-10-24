@@ -6,7 +6,7 @@ export type IconName =
   | 'star' | 'flame' | 'drop' | 'gift' | 'trophy' | 'camera'
   | 'wifi-off' | 'logout' | 'mail' | 'key'
   | 'minus' | 'bag' | 'more' | 'arrow'
-  | 'moon' | 'hourglass' | 'cloud';
+  | 'moon' | 'hourglass' | 'cloud' | 'pencil' | 'trash';
 
 /** Trazos de 24×24, estilo línea redondeada (como la barra del mockup). */
 const PATHS: Record<IconName, ReactNode> = {
@@ -94,6 +94,17 @@ const PATHS: Record<IconName, ReactNode> = {
   moon: <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="currentColor" />,
   hourglass: <path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9" />,
   cloud: <path d="M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 18 10.5 3.8 3.8 0 0 1 17.5 18z" fill="currentColor" />,
+  pencil: (
+    <>
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
+    </>
+  ),
+  trash: (
+    <>
+      <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+    </>
+  ),
 };
 
 interface IconProps {

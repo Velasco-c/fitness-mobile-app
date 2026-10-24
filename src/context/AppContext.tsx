@@ -21,6 +21,7 @@ interface AppContextValue {
   setPanelOpen: (open: boolean) => void;
   notify: (n: NewNotification) => void;
   markAllRead: () => void;
+  removeNotification: (id: string) => void;
   dismissToast: (id: string) => void;
 }
 
@@ -78,6 +79,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
   }, []);
 
+  const removeNotification = useCallback((id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  }, []);
+
   const dismissToast = useCallback((id: string) => {
     setToasts(prev => prev.filter(t => t.id !== id));
   }, []);
@@ -88,10 +93,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     () => ({
       user, session, sessionKey, startSession, logout, setAvatar,
       notifications, toasts, unread,
-      panelOpen, setPanelOpen, notify, markAllRead, dismissToast,
+      panelOpen, setPanelOpen, notify, markAllRead, removeNotification, dismissToast,
     }),
     [user, session, sessionKey, startSession, logout, setAvatar, notifications, toasts, unread,
-      panelOpen, notify, markAllRead, dismissToast],
+      panelOpen, notify, markAllRead, removeNotification, dismissToast],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

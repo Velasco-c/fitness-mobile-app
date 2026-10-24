@@ -1,14 +1,102 @@
 /* ==========================================================
-   NIVELES · pantalla de niveles como mapa de juego
+   NIVELES · 1) elegir categoría  2) mapa de niveles de la categoría
    ========================================================== */
 
 .screen-activity { background: var(--kf-bg); }
 
-/* Cabecera */
-.hub-head { display: flex; align-items: center; justify-content: center; padding: 8px 4px 14px; }
+/* Cabecera de la pantalla de categoría */
+.hub-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 4px 14px; }
 .hub-head h2 { font-size: 20px; font-weight: 600; }
 
-/* Progreso del mundo */
+/* ---------- 1) Selección de categoría ---------- */
+.cat-head { padding: 8px 4px 22px; }
+.cat-head .hello { font-size: 17px; color: var(--kf-text-secondary); }
+.cat-head h1 { font-size: 28px; font-weight: 400; line-height: 1.2; color: var(--kf-text); }
+
+.cat-stat { display: flex; align-items: center; gap: 16px; margin: 0 4px 28px; }
+.cat-stat-icon {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--kf-lime);
+  color: var(--kf-navy);
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--kf-navy) 18%, transparent);
+}
+.cat-stat-value { font-size: 34px; font-weight: 500; line-height: 1; color: var(--kf-text); }
+.cat-stat-value small { font-size: 16px; font-weight: 400; color: var(--kf-text-secondary); }
+
+/* Tarjetas deslizables: la siguiente asoma por la derecha */
+.cat-rail {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  margin: 0 -16px;
+  padding: 4px 16px 10px;
+  scrollbar-width: none;
+}
+.cat-rail::-webkit-scrollbar { display: none; }
+
+.cat-card {
+  flex: 0 0 58%;
+  max-width: 250px;
+  height: 340px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px 20px;
+  border: 0;
+  border-radius: var(--kf-radius-xl);
+  background: var(--cat-bg);
+  color: var(--cat-ink, var(--kf-white));
+  text-align: left;
+  font: inherit;
+  box-shadow: var(--kf-shadow-sm);
+  cursor: pointer;
+  transition: transform 0.25s var(--kf-ease);
+}
+.cat-card:active { transform: scale(0.97); }
+
+/* Color de cada categoría (campo "tone" de levels.json) */
+.cat-card.tone-blue   { --cat-bg: var(--kf-royal); }
+.cat-card.tone-green  { --cat-bg: var(--kf-green);  --cat-ink: var(--kf-navy); }
+.cat-card.tone-orange { --cat-bg: var(--kf-orange); --cat-ink: var(--kf-navy); }
+.cat-card.tone-teal   { --cat-bg: var(--kf-teal); }
+.cat-card.tone-pink   { --cat-bg: var(--kf-pink); }
+.cat-card.tone-indigo { --cat-bg: var(--kf-indigo); }
+.cat-card.tone-slate  { --cat-bg: var(--kf-slate); }
+
+.cat-count {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: var(--kf-radius-full);
+  background: color-mix(in srgb, currentColor 16%, transparent);
+  font-size: 14px;
+  font-weight: 600;
+}
+.cat-foot { display: block; }
+.cat-name { display: block; font-size: 28px; font-weight: 500; line-height: 1.1; }
+.cat-sub { display: block; margin-top: 6px; font-size: 15px; opacity: 0.85; }
+
+/* Progreso total, al final de la pantalla */
+.cat-progress {
+  margin-top: 26px;
+  padding: 20px 20px 22px;
+  border-radius: var(--kf-radius-xl);
+  background: var(--kf-indigo);
+  color: var(--kf-white);
+}
+.cat-progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 16px; }
+.cat-progress .xp { background: color-mix(in srgb, var(--kf-white) 28%, transparent); }
+.cat-progress .xp-fill { background: var(--kf-white); }
+
+/* ---------- 2) Mapa de niveles de la categoría ---------- */
+
+/* Progreso de la categoría */
 .world-card {
   background: var(--kf-surface);
   border: 1px solid var(--kf-border-subtle);
@@ -28,6 +116,23 @@
   transition: width 1s var(--kf-ease);
 }
 .world-card small { display: block; margin-top: 8px; font-size: 13px; color: var(--kf-text-muted); }
+
+/* Leyenda de dificultad */
+.world-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--kf-text-muted);
+}
+.world-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.world-legend i { width: 10px; height: 10px; border-radius: 50%; }
+
+/* Colores de dificultad: 1 fácil (verde), 2 normal (naranja), 3 difícil (rojo) */
+.diff-1 { background: var(--kf-success); }
+.diff-2 { background: var(--kf-warning); }
+.diff-3 { background: var(--kf-danger); }
 
 /* Tarjeta del nivel seleccionado */
 .level-card {
@@ -91,7 +196,7 @@
 .stars.sm { gap: 3px; }
 .stars.sm .star { width: 12px; height: 12px; }
 
-/* Mapa de niveles */
+/* Camino de niveles */
 .level-map { position: relative; margin: 0 4px; }
 .level-path { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .level-path path {
@@ -111,9 +216,10 @@
   align-items: center;
   gap: 6px;
 }
+.node-wrap { position: relative; display: block; width: 72px; height: 72px; }
 .node-core {
-  width: 72px;
-  height: 72px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -123,6 +229,17 @@
 .node-core svg { width: 30px; height: 30px; }
 .node-num { font-size: 26px; font-weight: 700; }
 .level-node:active .node-core { transform: scale(0.94); }
+
+/* Insignia de dificultad en la esquina del nodo */
+.node-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid var(--kf-bg);
+}
 
 .level-node.done .node-core {
   background: color-mix(in srgb, var(--kf-brand) 14%, transparent);

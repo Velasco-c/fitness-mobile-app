@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type FC } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
+import { ProgressProvider } from './context/ProgressContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { PhoneFrame } from './components/PhoneFrame';
 import { TabBar } from './components/TabBar';
@@ -66,7 +67,9 @@ export default function App() {
   return (
     <ThemeProvider>
       <AppProvider>
-        <Shell />
+        <ProgressProvider>
+          <Shell />
+        </ProgressProvider>
       </AppProvider>
     </ThemeProvider>
   );

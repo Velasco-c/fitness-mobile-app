@@ -1,48 +1,63 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { FEATURES } from '../config/features';
 import { useApp } from '../context/AppContext';
-import type { WaterData, WaterIntake } from '../types';
+import { useProgress } from '../context/ProgressContext';
+import {
+  dayOf, dayTotal, formatInterval, intervalMinutes, slotsFor, vasoLabel, ymd,
+} from '../utils/progress';
 import { Icon } from './Icons';
 import { Gauge } from './Ring';
-
-interface WaterTrackerProps {
-  data: WaterData;
-}
 
 /** Forma del vaso: cuerpo ligeramente cónico con fondo redondeado. */
 const GLASS = 'M16 10H104Q108 10 108 14L100 150Q99 166 84 166H36Q21 166 20 150L12 14Q12 10 16 10Z';
 /** Onda que se desplaza en bucle (30 px de periodo). */
 const WAVE = 'M-30 6q15-7 30 0t30 0t30 0t30 0t30 0t30 0t30 0V200H-30Z';
 
-const fmtL = (ml: number) => `${(ml / 1000).toFixed(2).replace(/\.?0+$/, '')} L`;
+/** Días en los que ya se celebró la meta (para no repetir el aviso al volver a la pestaña). */
+const celebrated = new Set<string>();
 
 /**
- * Hidratación: vaso animado, barra de lo que falta, botón grande con gota para
- * confirmar el recordatorio, tomas del día y, al final, el medidor de consumo.
- * Todo viene de water.json.
+ * Hidratación en vasos. La meta la elige el niño; cada recordatorio es un vaso.
+ * Solo se puede sumar agua después de confirmar un recordatorio que ya sonó,
+ * y nunca se pasa de la meta.
  */
-export function WaterTracker({ data }: WaterTrackerProps) {
+export function WaterTracker() {
   const { notify } = useApp();
-  const [intakes, setIntakes] = useState<WaterIntake[]>(data.intakes);
-  const [amount, setAmount] = useState(data.glassMl);
-  const [confirmed, setConfirmed] = useState(data.confirmedToday);
+  const { now, state, water, demoReminder, confirmReminder, logWater, undoWater } = useProgress();
+  const [amount, setAmount] = useState<number>(water.amounts[0]);
+  const [sheet, setSheet] = useState(false);
   const [ripple, setRipple] = useState(0);
-  const notified = useRef(false);
 
-  const total = intakes.reduce((sum, i) => sum + i.ml, 0);
-  const pct = Math.min(1, total / data.goalMl);
+  const date = ymd(now);
+  const day = dayOf(state, date);
+  const goal = state.goal;
+  const total = dayTotal(day);
+  const pct = Math.min(1, total / goal);
   const percent = Math.round(pct * 100);
-  const remainingPct = 100 - percent;
-  const remaining = Math.max(0, data.goalMl - total);
-  const glasses = Math.round(data.goalMl / data.glassMl);
-  const filled = Math.min(glasses, Math.floor(total / data.glassMl));
-  const reached = total >= data.goalMl;
+  const remaining = Math.max(0, goal - total);
+  const reached = total >= goal;
+
+  const slots = slotsFor(water, state, date, now);
+  const due = slots.find(s => s.state === 'due');
+  const confirmed = slots.find(s => s.state === 'confirmed');
+  const next = slots.find(s => s.state === 'waiting');
+  const every = formatInterval(intervalMinutes(water, goal));
+
+  const canConfirm = !!due && !reached;
+  const canLog = !!confirmed && !reached && amount <= remaining;
+
+  const hint = reached ? 'Meta lista, ¡muy bien!'
+    : confirmed ? 'Confirmado. Ahora suma tu vaso'
+      : due ? '¡Ya toca! Toca para confirmar'
+        : next ? `Siguiente a las ${next.time}`
+          : 'Hoy ya no quedan recordatorios';
 
   useEffect(() => {
-    if (reached && !notified.current) {
-      notified.current = true;
+    if (reached && !celebrated.has(date)) {
+      celebrated.add(date);
       notify({
         title: 'Meta de agua cumplida',
-        body: `Llevas ${fmtL(total)} hoy. ¡Muy bien!`,
+        body: `Tomaste ${total} ${total === 1 ? 'vaso' : 'vasos'} hoy. ¡Muy bien!`,
         tone: 'good',
         icon: 'drop',
       });
@@ -51,22 +66,11 @@ export function WaterTracker({ data }: WaterTrackerProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reached]);
 
-  const add = () => {
-    const time = new Date().toLocaleTimeString('es-GT', { hour: '2-digit', minute: '2-digit' });
-    setIntakes(prev => [...prev, { id: `w-${Date.now()}`, time, ml: amount }]);
-  };
-
-  const undo = () => setIntakes(prev => prev.slice(0, -1));
-
-  const confirmReminder = () => {
-    setConfirmed(c => c + 1);
+  const onConfirm = () => {
+    if (!canConfirm) return;
     setRipple(r => r + 1);
-    notify({
-      title: 'Recordatorio confirmado',
-      body: `Te avisaremos de nuevo en ${data.reminderHours} horas.`,
-      tone: 'good',
-      icon: 'drop',
-    });
+    confirmReminder();
+    notify({ title: 'Recordatorio confirmado', body: 'Ahora suma tu vaso.', tone: 'good', icon: 'drop' });
   };
 
   return (
@@ -75,7 +79,10 @@ export function WaterTracker({ data }: WaterTrackerProps) {
         <div className="water-top">
           <div>
             <h3>Hidratación</h3>
-            <p className="muted small-text">Meta {fmtL(data.goalMl)} · {glasses} vasos</p>
+            <p className="muted small-text">
+              Meta {goal} vasos · cada {every}{' '}
+              <button className="link-btn" onClick={() => setSheet(true)}>Cambiar</button>
+            </p>
           </div>
           {reached && (
             <span className="water-badge"><Icon name="star" size={14} /> Meta cumplida</span>
@@ -107,82 +114,95 @@ export function WaterTracker({ data }: WaterTrackerProps) {
 
           <div className="water-info">
             <p className="water-value">
-              {fmtL(total)}<small> de {fmtL(data.goalMl)}</small>
+              {total}<small> de {goal} vasos</small>
             </p>
 
-            <div className="glasses" aria-label={`${filled} de ${glasses} vasos`}>
-              {Array.from({ length: glasses }, (_, i) => (
-                <span key={i} className={`drop ${i < filled ? 'on' : ''}`}>
+            <div className="glasses" aria-label={`${total} de ${goal} vasos`}>
+              {Array.from({ length: goal }, (_, i) => (
+                <span key={i} className={`drop ${i < total ? 'on' : ''}`}>
                   <Icon name="drop" size={18} />
                 </span>
               ))}
             </div>
 
             <div className="water-actions">
-              <button className="water-minus" onClick={undo} disabled={intakes.length === 0} aria-label="Quitar la última toma">
+              <button
+                className="water-minus"
+                onClick={undoWater}
+                disabled={day.logs.length === 0}
+                aria-label="Quitar el último vaso"
+              >
                 <Icon name="minus" size={18} />
               </button>
-              <button className="water-add" onClick={add}>
-                <Icon name="plus" size={16} /> {amount} ml
+              <button className="water-add" onClick={() => logWater(amount)} disabled={!canLog}>
+                <Icon name="plus" size={16} /> {vasoLabel(amount)}
               </button>
             </div>
+            {!confirmed && !reached && (
+              <small className="water-lock">Confirma un recordatorio para sumar vasos.</small>
+            )}
           </div>
         </div>
 
-        <div className="amounts" role="radiogroup" aria-label="Cantidad por toma">
-          {data.amounts.map(a => (
+        <div className="amounts" role="radiogroup" aria-label="Cuántos vasos tomaste">
+          {water.amounts.map(a => (
             <button
               key={a}
               role="radio"
               aria-checked={a === amount}
+              disabled={a > remaining}
               className={`amount ${a === amount ? 'on' : ''}`}
               onClick={() => setAmount(a)}
             >
-              {a} ml
+              {vasoLabel(a)}
             </button>
           ))}
         </div>
 
         <div className="remain">
           <div className="remain-top">
-            <span>{reached ? 'Meta cumplida' : `Te faltan ${remaining} ml`}</span>
-            <b>{remainingPct}%</b>
+            <span>{reached ? 'Meta cumplida' : `Te faltan ${remaining} ${remaining === 1 ? 'vaso' : 'vasos'}`}</span>
+            <b>{percent}%</b>
           </div>
           <div
             className="remain-track"
             role="progressbar"
-            aria-label="Porcentaje que falta para la meta"
+            aria-label="Porcentaje de la meta cumplido"
             aria-valuemin={0}
             aria-valuemax={100}
-            aria-valuenow={remainingPct}
+            aria-valuenow={percent}
           >
-            <span className={reached ? 'done' : ''} style={{ width: `${remainingPct}%` }} />
+            <span className={reached ? 'done' : ''} style={{ width: `${percent}%` }} />
           </div>
         </div>
 
-        <button className="remind-btn" onClick={confirmReminder}>
+        <button
+          className={`remind-btn ${canConfirm ? 'due' : ''}`}
+          onClick={onConfirm}
+          disabled={!canConfirm}
+        >
           {ripple > 0 && <span key={`r${ripple}`} className="remind-ripple" aria-hidden="true" />}
           <span key={`i${ripple}`} className={`remind-icon ${ripple > 0 ? 'bounce' : ''}`}>
             <Icon name="drop" size={26} />
           </span>
           <span className="remind-text">
             <b>Confirmar recordatorio</b>
-            <small>Confirmados hoy: {confirmed} · cada {data.reminderHours} h</small>
+            <small>{hint}</small>
           </span>
         </button>
       </section>
 
       <section className="card intakes-card">
         <p className="intakes-title">Tomas de hoy</p>
-        {intakes.length === 0 ? (
+        {day.logs.length === 0 ? (
           <p className="muted small-text">Aún no registras agua hoy.</p>
         ) : (
           <ul className="intakes">
-            {[...intakes].reverse().slice(0, 4).map(i => (
-              <li key={i.id}>
+            {[...day.logs].reverse().slice(0, 4).map(l => (
+              <li key={l.id}>
                 <Icon name="drop" size={16} />
-                <span>{i.time}</span>
-                <b>{i.ml} ml</b>
+                <span>{l.time}</span>
+                <b>{vasoLabel(l.glasses)}</b>
               </li>
             ))}
           </ul>
@@ -192,6 +212,78 @@ export function WaterTracker({ data }: WaterTrackerProps) {
       <div className="water-score">
         <Gauge score={percent} unit="%" label="Agua consumida hoy" />
       </div>
+
+      {sheet && <GoalSheet onClose={() => setSheet(false)} />}
     </>
+  );
+}
+
+interface GoalSheetProps {
+  onClose: () => void;
+}
+
+/** Hoja para elegir cuántos vasos toma el niño al día. Sugiere cada cuánto sonará el recordatorio. */
+function GoalSheet({ onClose }: GoalSheetProps) {
+  const { water, state, setGoal, forceReminder, demoReminder } = useProgress();
+  const [draft, setDraft] = useState(state.goal);
+  const every = formatInterval(intervalMinutes(water, draft));
+  const liters = (draft * 0.25).toFixed(1).replace(/\.0$/, '');
+
+  const save = () => {
+    setGoal(draft);
+    onClose();
+  };
+
+  return (
+    <div className="kf-sheet-layer" onClick={onClose}>
+      <div
+        className="kf-sheet"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Meta de agua"
+        onClick={e => e.stopPropagation()}
+      >
+        <h3>¿Cuántos vasos tomas al día?</h3>
+        <p className="muted small-text">1 vaso = un vaso normal de agua.</p>
+
+        <div className="goal-step">
+          <button
+            onClick={() => setDraft(d => Math.max(water.goalMin, d - 1))}
+            disabled={draft <= water.goalMin}
+            aria-label="Quitar un vaso"
+          >
+            <Icon name="minus" size={20} />
+          </button>
+          <p><b>{draft}</b> vasos</p>
+          <button
+            onClick={() => setDraft(d => Math.min(water.goalMax, d + 1))}
+            disabled={draft >= water.goalMax}
+            aria-label="Añadir un vaso"
+          >
+            <Icon name="plus" size={20} />
+          </button>
+        </div>
+
+        <div className="goal-drops" aria-hidden="true">
+          {Array.from({ length: draft }, (_, i) => <Icon key={i} name="drop" size={18} />)}
+        </div>
+
+        <p className="goal-plan">
+          Te avisaré cada <b>{every}</b>, de {water.wake} a {water.sleep} (unos {liters} litros).
+          Sugerido: {water.suggestedGlasses} vasos.
+        </p>
+
+        <button className="btn-primary" onClick={save}>Guardar meta</button>
+
+        {demoReminder && FEATURES.demoReminder && (
+          <button
+            className="link-btn center"
+            onClick={() => { forceReminder(); onClose(); }}
+          >
+            Probar recordatorio
+          </button>
+        )}
+      </div>
+    </div>
   );
 }

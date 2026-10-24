@@ -1,16 +1,3 @@
 {
-  "levelsToday": 2,
-  "goal": 3,
-  "completedLevels": 2,
-  "trainings": 0,
-  "starsThisWeek": 4,
-  "weekly": [
-    { "day": "L", "value": 0 },
-    { "day": "M", "value": 1 },
-    { "day": "X", "value": 0 },
-    { "day": "J", "value": 1 },
-    { "day": "V", "value": 2 },
-    { "day": "S", "value": 0 },
-    { "day": "D", "value": 0 }
-  ]
+  "goal": 3
 }

@@ -11,7 +11,9 @@ export type Session = 'online' | 'offline';
 export type NotificationIcon = 'bell' | 'trophy' | 'drop' | 'gift' | 'camera' | 'star';
 
 /** Color del avatar. Cada valor tiene una clase tone-* en profile.css. */
-export type AvatarTone = 'sky' | 'indigo' | 'teal' | 'red' | 'pink' | 'green' | 'gray' | 'navy';
+export type AvatarTone =
+  | 'sky' | 'indigo' | 'teal' | 'red' | 'pink' | 'green' | 'gray' | 'navy'
+  | 'orange' | 'yellow' | 'royal';
 
 export interface AppNotification {
   id: string;
@@ -32,72 +34,121 @@ export interface UserProfile {
   avatar: string;
 }
 
-/** Hidratación: meta, tamaño de vaso y tomas de hoy (water.json). */
-export interface WaterIntake {
-  id: string;
-  time: string;
-  ml: number;
-}
-
-export interface WaterData {
-  goalMl: number;
-  glassMl: number;
+/** Hidratación: configuración de water.json. Las tomas y recordatorios de cada día se guardan aparte (utils/progress.ts). */
+export interface WaterConfig {
+  /** Meta inicial en vasos. */
+  goalGlasses: number;
+  goalMin: number;
+  goalMax: number;
+  suggestedGlasses: number;
+  /** Hora de despertar y de dormir (HH:MM): entre ellas se reparten los recordatorios. */
+  wake: string;
+  sleep: string;
+  /** Tamaños de toma que puede elegir el niño, en vasos. */
   amounts: number[];
-  reminderHours: number;
-  /** Recordatorios que el usuario ya confirmó hoy. */
-  confirmedToday: number;
-  intakes: WaterIntake[];
 }
 
-export type LevelStatus = 'done' | 'current' | 'locked';
-export type Difficulty = 1 | 2 | 3;
+/* ---------- Niveles ----------
+ * levels.json solo guarda lo que se edita: categorías y, dentro de cada una,
+ * los niveles. El número, el estado y los totales se calculan en utils/levels.ts.
+ */
 
-export interface Level {
-  id: string;
-  number: number;
-  /** Nombre del nivel; null mientras no esté definido. */
+export type Difficulty = 1 | 2 | 3;
+export type LevelStars = 0 | 1 | 2 | 3;
+export type LevelStatus = 'done' | 'current' | 'locked';
+
+/** Color de la tarjeta de categoría. Cada valor tiene una clase tone-* en levels.css. */
+export type CategoryTone = 'blue' | 'green' | 'orange' | 'teal' | 'pink' | 'indigo' | 'slate';
+
+/** Nivel tal como está en levels.json. */
+export interface LevelEntry {
+  /** Nombre del nivel; null mientras no esté definido («Por definir»). */
   title: string | null;
-  /** Patrón de movimiento (clave del JSON de movimientos). */
+  /** Clave del patrón de movimiento; null si aún no tiene. */
   pattern: string | null;
   difficulty: Difficulty;
-  stars: 0 | 1 | 2 | 3;
+  /** Estrellas ganadas. Un nivel con estrellas está completado. */
+  stars: LevelStars;
+}
+
+/** Categoría tal como está en levels.json. */
+export interface CategoryEntry {
+  id: string;
+  name: string;
+  /** Texto pequeño de la categoría, p. ej. «Mundo 1». */
+  subtitle: string;
+  tone: CategoryTone;
+  levels: LevelEntry[];
+}
+
+/** Contenido de levels.json. */
+export interface LevelsData {
+  /** Cómo se juega el nivel, p. ej. «Cámara frontal». */
+  movementSource: string;
+  categories: CategoryEntry[];
+}
+
+/** Nivel con número y estado calculados. */
+export interface Level extends LevelEntry {
+  id: string;
+  number: number;
   status: LevelStatus;
 }
 
-export interface LevelsData {
-  world: string;
+/** Categoría lista para la UI, con progreso calculado. */
+export interface Category extends Omit<CategoryEntry, 'levels'> {
+  levels: Level[];
+  done: number;
   stars: number;
   maxStars: number;
-  xp: number;
-  xpNext: number;
-  movementSource: string;
-  levels: Level[];
+}
+
+/** Totales de todas las categorías. next es el primer nivel actual que falta. */
+export interface LevelTotals {
+  categories: number;
+  levels: number;
+  done: number;
+  stars: number;
+  maxStars: number;
+  next: { category: Category; level: Level } | null;
 }
 
 export interface SummaryData {
-  /** niveles completados hoy y meta diaria */
-  levelsToday: number;
+  /** Meta diaria de niveles. Lo demás sale del progreso guardado. */
   goal: number;
-  completedLevels: number;
-  trainings: number;
-  starsThisWeek: number;
-  weekly: { day: string; value: number }[];
 }
 
-export interface Achievement {
+/** Regla que desbloquea un logro. El valor se calcula del progreso del niño. */
+export type AchievementRule =
+  | { type: 'levelsDone'; count: number }
+  | { type: 'stars'; count: number }
+  | { type: 'streak'; count: number }
+  | { type: 'waterGoalDays'; count: number }
+  | { type: 'categoriesDone'; count: number };
+
+/** Logro tal como está en achievements.json. */
+export interface AchievementDef {
   id: string;
   title: string;
+  /** Cómo se gana, en una frase. */
   detail: string;
   tone: AvatarTone;
-  unlocked: boolean;
+  rule: AchievementRule;
+}
+
+/** Avatar ilustrado de profile.json: imagen y color de fondo. */
+export interface AvatarArt {
+  id: string;
+  /** Ruta de la imagen (recortada en círculo, con transparencia). */
+  src: string;
+  tone: AvatarTone;
 }
 
 export interface ProfileData {
-  photo: string;
-  stars: number;
-  streak: number;
-  /** Días con actividad, como desplazamiento respecto a hoy (0 = hoy). */
-  activeDays: number[];
-  achievements: Achievement[];
-  avatars: { id: string; tone: AvatarTone }[];
+  /** Avatar y color de partida, antes de que el niño elija. */
+  defaultAvatar: string;
+  defaultTone: AvatarTone;
+  /** Días de actividad de partida (desplazamiento respecto a hoy). Solo siembran el progreso la primera vez. */
+  seedActiveDays: number[];
+  avatars: AvatarArt[];
 }

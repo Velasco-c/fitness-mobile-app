@@ -1,4 +1,4 @@
-import { TABS } from '../config/navigation';
+import { VISIBLE_TABS } from '../config/navigation';
 import type { TabId } from '../types';
 import { Icon } from './Icons';
 
@@ -11,7 +11,7 @@ interface TabBarProps {
 export function TabBar({ active, onChange }: TabBarProps) {
   return (
     <nav className="tabbar" aria-label="Navegación principal">
-      {TABS.map(t => (
+      {VISIBLE_TABS.map(t => (
         <button
           key={t.id}
           className={`tab ${active === t.id ? 'on' : ''}`}
