@@ -1,65 +1,68 @@
 import { useState, type CSSProperties } from 'react';
 import { Icon } from '../components/Icons';
 import { LevelMap, Stars } from '../components/LevelMap';
+import { LoadError, Loading } from '../components/LoadState';
 import { useApp } from '../context/AppContext';
-import { LIVE_SOURCES, POST_SOURCES } from '../data/devices';
-import { DIFFICULTY_LABEL, LEVELS, PLAYER } from '../data/levels';
+import { DIFFICULTY_LABEL } from '../config/labels';
+import { useData } from '../hooks/useData';
+import { api } from '../services/api';
 
+/** Pantalla de niveles: mapa de niveles y tarjeta del nivel elegido. Datos de levels.json. */
 export function SelectActivity() {
   const { notify } = useApp();
-  const [levelId, setLevelId] = useState(
-    LEVELS.find(l => l.status === 'current')?.id ?? LEVELS[0].id,
-  );
-  const [sourceIdx, setSourceIdx] = useState(0);
+  const { data, error, reload, loading } = useData(() => api.levels());
+  const [picked, setPicked] = useState<string | null>(null);
 
-  const level = LEVELS.find(l => l.id === levelId) ?? LEVELS[0];
-  const source = LIVE_SOURCES[sourceIdx];
-  const post = POST_SOURCES[0];
+  if (loading) return <Loading />;
+  if (error || !data) return <LoadError message={error} onRetry={reload} />;
+
+  const levelId = picked ?? data.levels.find(l => l.status === 'current')?.id ?? data.levels[0].id;
+  const level = data.levels.find(l => l.id === levelId) ?? data.levels[0];
   const locked = level.status === 'locked';
+  const title = level.title ?? 'Por definir';
 
   const play = () =>
     notify({
-      title: `${level.name} empezó`,
-      body: `${level.minutes} min · ritmo cardíaco: ${source.name}`,
+      title: `Nivel ${level.number} empezó`,
+      body: `${title} · ${DIFFICULTY_LABEL[level.difficulty]}`,
       tone: 'good',
+      icon: 'star',
     });
 
   return (
     <div className="screen-scroll">
       <header className="hub-head">
-        <button className="icon-btn" aria-label="Cerrar"><Icon name="close" /></button>
-        <h2>Elegir actividad</h2>
-        <span className="icon-btn" aria-hidden="true"><Icon name="pulse" /></span>
+        <h2>Niveles</h2>
       </header>
 
       <section className="world-card">
         <div className="world-top">
-          <span className="world-kicker">{PLAYER.world}</span>
-          <span className="stars-count">★ {PLAYER.stars}/{PLAYER.maxStars}</span>
+          <span className="world-kicker">{data.world}</span>
+          <span className="stars-count">★ {data.stars}/{data.maxStars}</span>
         </div>
         <div className="xp">
-          <div className="xp-fill" style={{ '--p': `${(PLAYER.xp / PLAYER.xpNext) * 100}%` } as CSSProperties} />
+          <div className="xp-fill" style={{ '--p': `${(data.xp / data.xpNext) * 100}%` } as CSSProperties} />
         </div>
-        <small>{PLAYER.xp}/{PLAYER.xpNext} puntos · {post.name} · {post.battery}%</small>
+        <small>{data.xp}/{data.xpNext} puntos</small>
       </section>
 
       <section className={`level-card ${locked ? 'is-locked' : ''}`}>
         <div className="pips" aria-label={`Dificultad: ${DIFFICULTY_LABEL[level.difficulty]}`}>
           {[1, 2, 3].map(n => <i key={n} className={n <= level.difficulty ? 'on' : ''} />)}
         </div>
-        <h3>{level.name}</h3>
-        <p className="muted">{level.minutes} min · {DIFFICULTY_LABEL[level.difficulty]}</p>
+        <h3>Nivel {level.number}</h3>
+        <p>{title} · {DIFFICULTY_LABEL[level.difficulty]}</p>
         <Stars count={level.stars} />
-        <button className="chip" onClick={() => setSourceIdx(i => (i + 1) % LIVE_SOURCES.length)}>
-          <Icon name="heart" size={14} />
-          {source.name}{source.hr !== undefined && ` · ${source.hr} bpm`}
-        </button>
+        <span className="chip">
+          <Icon name="camera" size={14} />
+          {data.movementSource}
+        </span>
         <button className="play-btn" disabled={locked} onClick={play}>
           {locked ? 'Bloqueado' : 'Jugar'}
         </button>
       </section>
 
-      <LevelMap levels={LEVELS} selectedId={levelId} onSelect={setLevelId} />
+      <LevelMap levels={data.levels} selectedId={levelId} onSelect={setPicked} />
     </div>
   );
 }

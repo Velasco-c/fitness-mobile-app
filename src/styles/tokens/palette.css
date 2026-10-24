@@ -1,0 +1,49 @@
+/*
+ * KidFit · Paleta primitiva
+ *
+ * Valores crudos, sin significado de uso. Los componentes NO deben usar estos
+ * nombres directamente: usan los tokens semánticos de theme.css (--kf-bg,
+ * --kf-brand, --kf-text, ...). Así un cambio de marca se hace aquí y un cambio
+ * de significado se hace en theme.css.
+ *
+ * Origen: las 9 muestras de color de la franja central del archivo
+ * "Mokoups de prueba" (Figma), más la escala de celestes y los acentos de los
+ * mockups de dashboard (horarios), estadísticas (estadistica) y perfil (avatars).
+ */
+
+:root {
+  /* Marca: 9 muestras de la paleta de Figma */
+  --kf-red: #FF2600;
+  --kf-coral: #F76121;
+  --kf-orange: #FF9800;
+  --kf-white: #FFFFFF;
+  --kf-sky: #95D9F4;
+  --kf-blue: #1976D2;
+  --kf-navy: #191970;
+  --kf-green: #0BDF6A;
+
+  /* Celestes: escala derivada de --kf-sky para fondos y superficies del tema claro */
+  --kf-sky-50: #F1FAFE;
+  --kf-sky-100: #E0F4FC;
+  --kf-sky-200: #C4EAF9;
+  --kf-sky-300: #95D9F4;
+  --kf-sky-500: #4DB8E6;
+  --kf-sky-700: #1C7FB5;
+
+  /* Acentos de los mockups (tarjetas del dashboard y avatares) */
+  --kf-lime: #B2F04D;
+  --kf-indigo: #3D5BB5;
+  --kf-slate: #525F7F;
+  --kf-royal: #4A7DFF;
+  --kf-teal: #00C2CC;
+  --kf-pink: #D1348F;
+
+  /* Neutros del mockup, de más claro a más oscuro */
+  --kf-gray-50: #F5F5F5;
+  --kf-gray-100: #E5E8EF;
+  --kf-gray-200: #CDD2DE;
+  --kf-gray-300: #A0A7BA;
+  --kf-gray-400: #8990A1;
+  --kf-gray-500: #424753;
+  --kf-gray-600: #21293A;
+}

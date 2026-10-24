@@ -12,8 +12,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 /** Reglas del formulario de registro. Devuelve un objeto vacío si todo es válido. */
 export function validateRegister(v: RegisterInput): RegisterErrors {
   const errors: RegisterErrors = {};
-  if (v.name.trim().length < 2) errors.name = 'Use at least 2 characters.';
-  if (!EMAIL_RE.test(v.email.trim())) errors.email = 'Enter a valid email.';
-  if (v.password.length < 6) errors.password = 'Use at least 6 characters.';
+  if (v.name.trim().length < 2) errors.name = 'Usa al menos 2 caracteres.';
+  if (!EMAIL_RE.test(v.email.trim())) errors.email = 'Escribe un correo válido.';
+  if (v.password.length < 6) errors.password = 'Usa al menos 6 caracteres.';
   return errors;
 }

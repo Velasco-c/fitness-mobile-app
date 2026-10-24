@@ -1,0 +1,82 @@
+/* ==========================================================
+   BIENVENIDA · tras iniciar sesión (cuenta u offline)
+   El monito cae, salta de alegría, crece; una burbuja celeste
+   se expande y la pantalla se desvanece hacia el inicio.
+   Duración total: 2.7 s (WELCOME_MS en components/Welcome.tsx)
+   ========================================================== */
+
+.welcome {
+  position: absolute;
+  inset: 0;
+  z-index: 110;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--kf-hero-top) 0%, var(--kf-hero-bottom) 100%);
+  animation: welcome-out 0.5s var(--kf-ease) 2.2s forwards;
+}
+
+/* Burbuja que se expande desde el centro hasta cubrir la pantalla */
+.welcome-burst {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: var(--kf-hero-bottom);
+  transform: scale(0);
+  animation: welcome-burst 0.9s cubic-bezier(0.65, 0, 0.35, 1) 1.6s forwards;
+}
+
+.welcome-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.welcome-figure {
+  width: 124px;
+  height: 140px;
+  transform-origin: 50% 100%;
+  animation: welcome-figure 2.1s linear 0.1s both;
+}
+.welcome-figure .figure-body { fill: var(--kf-brand); }
+.welcome-figure .figure-face { fill: var(--kf-hero-top); }
+
+.welcome-text {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--kf-text);
+  text-shadow: 0 2px 12px color-mix(in srgb, var(--kf-white) 60%, transparent);
+  animation: welcome-text 0.6s var(--kf-ease) 1.9s both;
+}
+
+/* Caída con rebote, dos saltos con estiramiento y crecimiento final */
+@keyframes welcome-figure {
+  0% { transform: translateY(-58vh) scale(1); opacity: 0; }
+  12% { opacity: 1; }
+  22% { transform: translateY(0) scale(1.12, 0.88); }
+  32% { transform: translateY(0) scale(0.97, 1.04); }
+  46% { transform: translateY(-72px) scale(0.94, 1.1) rotate(-6deg); }
+  58% { transform: translateY(0) scale(1.14, 0.86); }
+  70% { transform: translateY(-38px) scale(0.97, 1.05) rotate(5deg); }
+  80% { transform: translateY(0) scale(1.08, 0.92); }
+  90% { transform: translateY(0) scale(1.4); }
+  100% { transform: translateY(0) scale(1.4); }
+}
+
+@keyframes welcome-burst {
+  from { transform: scale(0); }
+  to { transform: scale(6.5); }
+}
+
+@keyframes welcome-text {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes welcome-out {
+  to { opacity: 0; visibility: hidden; }
+}

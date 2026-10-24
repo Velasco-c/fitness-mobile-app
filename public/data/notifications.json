@@ -1,0 +1,7 @@
+[
+  { "id": "n1", "title": "Casi logras tu meta", "body": "Te falta 1 nivel para cumplir tu meta de hoy.", "time": "11:17", "read": false, "tone": "good", "icon": "trophy" },
+  { "id": "n2", "title": "Recompensa desbloqueada", "body": "Ganaste 1 estrella extra por tu racha.", "time": "08:02", "read": false, "tone": "good", "icon": "gift" },
+  { "id": "n3", "title": "Hora de hidratarte", "body": "Toma un poco de agua antes del siguiente nivel.", "time": "07:40", "read": true, "tone": "warn", "icon": "drop" },
+  { "id": "n4", "title": "Cámara lista", "body": "La cámara está lista para detectar tus movimientos.", "time": "Ayer", "read": true, "icon": "camera" },
+  { "id": "n5", "title": "Nuevo nivel disponible", "body": "El Nivel 3 ya está desbloqueado.", "time": "Ayer", "read": true, "icon": "star" }
+]

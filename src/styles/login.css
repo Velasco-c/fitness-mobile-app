@@ -1,0 +1,73 @@
+/* ==========================================================
+   ACCESO · pantalla de login según el mockup (LOG IN / CREAR CUENTA)
+   Fondo y logo cambian con el tema (--kf-hero-*, --kf-logo-*).
+   ========================================================== */
+
+.screen-login {
+  background: linear-gradient(180deg, var(--kf-hero-top) 0%, var(--kf-hero-bottom) 100%);
+}
+
+.login {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 64px;
+  padding: 0 28px 72px;
+}
+
+/* Logo: KID / figura / FIT */
+.logo { width: 100%; display: flex; flex-direction: column; align-items: center; }
+.logo-word { width: 100%; display: flex; justify-content: space-between; }
+.logo-letter {
+  display: block;
+  font-size: 96px;
+  font-weight: 900;
+  line-height: 0.92;
+  background: linear-gradient(180deg, var(--kf-logo-start), var(--kf-logo-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.logo-figure { width: 104px; height: 118px; margin: -8px 0; overflow: visible; }
+.logo-figure .figure-body { fill: var(--kf-brand); }
+.logo-figure .figure-face { fill: var(--kf-hero-top); }
+
+/* Botones de vidrio */
+.login-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+}
+.glass-btn {
+  width: min(280px, 100%);
+  border-radius: var(--kf-radius-full);
+  background: var(--kf-glass);
+  border: 1px solid var(--kf-glass-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--kf-shadow-sm);
+  color: var(--kf-text);
+  font-weight: 800;
+  text-transform: uppercase;
+  transition: transform 0.2s;
+}
+.glass-btn:active { transform: scale(0.97); }
+.glass-btn-main { height: 62px; font-size: 17px; letter-spacing: 0.12em; }
+.glass-btn-alt { height: 54px; font-size: 14px; letter-spacing: 0.12em; }
+.glass-btn:disabled { opacity: 0.6; }
+
+/* Crear cuenta (dentro del acceso) */
+.login-register { background: var(--kf-bg); }
+.icon-btn-spacer { width: 46px; height: 46px; flex: none; }
+
+/* Texto bajo los botones de acceso */
+.login-caption { font-size: 14px; color: var(--kf-text-secondary); text-align: center; margin-top: -8px; max-width: 260px; }
+.login-error { margin-top: -12px; text-align: center; }
+
+/* Formulario de inicio de sesión */
+.hint { font-size: 13px; color: var(--kf-text-muted); text-align: center; margin-top: 4px; }
+.link-btn.center { display: block; width: 100%; text-align: center; margin-top: 16px; }

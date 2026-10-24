@@ -1,0 +1,58 @@
+/* ==========================================================
+   INTRO · el monito salta de alegría y la escena se expande
+   Duración total: 2.6 s (INTRO_MS en components/Intro.tsx)
+   ========================================================== */
+
+.intro {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, var(--kf-hero-top) 0%, var(--kf-hero-bottom) 100%);
+  overflow: hidden;
+}
+
+.intro-stage { width: min(330px, 88%); }
+.intro .logo { width: 100%; }
+
+.intro-stage {
+  animation: intro-expand 0.6s var(--kf-ease) 2s both;
+  transform-origin: 50% 45%;
+}
+
+/* Las letras aparecen desde los lados, KID desde la izquierda y FIT desde la derecha */
+.intro .logo-word:first-of-type { animation: intro-from-left 0.6s var(--kf-ease) 0.1s both; }
+.intro .logo-word:last-of-type { animation: intro-from-right 0.6s var(--kf-ease) 0.1s both; }
+
+/* Salto de alegría: dos rebotes con estiramiento y un giro suave */
+.intro .logo-figure {
+  transform-origin: 50% 100%;
+  animation: intro-jump 1.6s linear 0.35s both;
+}
+
+@keyframes intro-from-left {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes intro-from-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes intro-jump {
+  0%   { transform: translateY(0) scale(1.08, 0.92); }
+  10%  { transform: translateY(0) scale(0.96, 1.04); }
+  38%  { transform: translateY(-86px) scale(0.92, 1.1) rotate(-7deg); }
+  52%  { transform: translateY(0) scale(1.14, 0.86); }
+  66%  { transform: translateY(-44px) scale(0.96, 1.06) rotate(6deg); }
+  80%  { transform: translateY(0) scale(1.1, 0.9); }
+  90%  { transform: translateY(0) scale(1, 1); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes intro-expand {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(3.4); opacity: 0; }
+}

@@ -1,0 +1,83 @@
+/* ==========================================================
+   PANEL DE NOTIFICACIONES (estilo notificaciones+.png)
+   Cabecera celeste con bordes redondeados y lista con iconos de color.
+   ========================================================== */
+
+.notif-sheet {
+  padding: 0 0 24px;
+  background: var(--kf-bg);
+}
+
+.notif-head {
+  padding: 14px 20px 26px;
+  background: var(--kf-sheet-head);
+  color: var(--kf-sheet-head-ink);
+  border-radius: 0 0 36px 36px;
+  box-shadow: var(--kf-shadow-sm);
+}
+.notif-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.notif-top h2 { font-size: 20px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; }
+.notif-round {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--kf-sheet-head-ink) 14%, transparent);
+  color: inherit;
+}
+.notif-round-static { cursor: default; }
+.notif-meta { display: flex; align-items: center; justify-content: space-between; font-size: 15px; }
+.notif-link { color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+.notif-title { font-size: 22px; font-weight: 400; margin: 22px 20px 6px; }
+
+.notif-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 16px;
+  overflow-y: auto;
+}
+.notif {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 6px;
+  border-bottom: 1px solid var(--kf-border-subtle);
+  animation: enter 0.4s var(--kf-ease) both;
+}
+.notif-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: var(--kf-brand);
+  color: var(--kf-on-brand);
+}
+.notif-icon.good { background: var(--kf-success); color: var(--kf-on-success); }
+.notif-icon.warn { background: var(--kf-warning); color: var(--kf-on-warning); }
+.notif-icon.bad { background: var(--kf-danger); color: var(--kf-on-danger); }
+
+.notif-body { flex: 1; min-width: 0; }
+.notif-body b { font-size: 16px; font-weight: 600; }
+.notif-body p { color: var(--kf-text-secondary); font-size: 14px; margin-top: 2px; line-height: 1.35; }
+.notif small { color: var(--kf-text-muted); font-size: 12px; align-self: flex-start; margin-top: 4px; white-space: nowrap; }
+.notif.unread .notif-body b::after {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--kf-brand);
+  vertical-align: middle;
+}

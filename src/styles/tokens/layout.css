@@ -1,0 +1,45 @@
+/*
+ * KidFit · Layout: radios, tamaños, espaciado y sombra
+ *
+ * Medidas tomadas del SVG de Figma (frames de 375 × 812) salvo donde se indica.
+ * Son independientes del tema: el mismo valor sirve en claro y en oscuro.
+ */
+
+:root {
+  /* Tipografía (familia; el mockup no trae fuente exportable) */
+  --kf-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+
+  /* Marco de referencia del diseño */
+  --kf-frame-width: 375px;
+  --kf-frame-height: 812px;
+
+  /* Radios (medidos en el mockup; --kf-radius-lg es el más usado: tarjetas) */
+  --kf-radius-sm: 10px;
+  --kf-radius-md: 14px;
+  --kf-radius-lg: 20px;
+  --kf-radius-xl: 30px;
+  --kf-radius-full: 9999px;
+
+  /* Tamaños de componentes (medidos en el mockup) */
+  --kf-nav-height: 70px;
+  --kf-fab-size: 60px;
+  --kf-avatar-sm: 40px;
+  --kf-avatar-md: 105px;
+  --kf-avatar-lg: 120px;
+
+  /* Espaciado: escala de 4 px. CONVENCIÓN, no se midió en el mockup. */
+  --kf-space-1: 4px;
+  --kf-space-2: 8px;
+  --kf-space-3: 12px;
+  --kf-space-4: 16px;
+  --kf-space-5: 20px;
+  --kf-space-6: 24px;
+  --kf-space-8: 32px;
+
+  /* Sombras (la de la barra inferior está medida: desenfoque de 45 px, opacidad 10 %) */
+  --kf-shadow-nav: 0 0 45px rgba(0, 0, 0, 0.1);
+  --kf-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.12);
+
+  /* Movimiento */
+  --kf-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

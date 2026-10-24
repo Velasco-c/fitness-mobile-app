@@ -10,11 +10,12 @@ interface TabBarProps {
 /** Barra inferior flotante. Las pestañas se definen en config/navigation.ts */
 export function TabBar({ active, onChange }: TabBarProps) {
   return (
-    <nav className="tabbar" aria-label="Main navigation">
+    <nav className="tabbar" aria-label="Navegación principal">
       {TABS.map(t => (
         <button
           key={t.id}
           className={`tab ${active === t.id ? 'on' : ''}`}
+          aria-label={t.label}
           aria-current={active === t.id ? 'page' : undefined}
           onClick={() => onChange(t.id)}
         >

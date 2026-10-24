@@ -1,0 +1,170 @@
+/* ==========================================================
+   HOY · hidratación: vaso animado, barra de lo que falta,
+   botón de recordatorio con gota y medidor de consumo al final.
+   Colores de la paleta KidFit: celeste, azul de marca y verde de meta.
+   ========================================================== */
+
+.screen-opal { background: linear-gradient(180deg, var(--kf-page-top) 0%, var(--kf-page-bottom) 100%); }
+
+.hoy-head { padding: 12px 4px 14px; }
+.hoy-head h1 { font-size: 34px; font-weight: 500; letter-spacing: -0.6px; }
+.hoy .card { animation: enter 0.5s var(--kf-ease) both; }
+
+/* ---------- Tarjeta de hidratación ---------- */
+.water { padding: 18px 16px 16px; }
+.water-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.water h3 { font-size: 20px; font-weight: 600; }
+.water-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: var(--kf-radius-full);
+  background: var(--kf-success);
+  color: var(--kf-on-success);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  animation: pop 0.5s var(--kf-ease) both;
+}
+
+/* Vaso (se queda como estaba) */
+.water-main { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
+.glass-wrap { width: 118px; flex: none; }
+.glass { width: 100%; height: auto; overflow: visible; }
+.glass-body { fill: var(--kf-tint); }
+.glass-outline { fill: none; stroke: var(--kf-brand); stroke-opacity: 0.5; stroke-width: 3; stroke-linejoin: round; }
+.water-level { transition: transform 0.9s var(--kf-ease); }
+.wave { animation: water-wave 2.4s linear infinite; }
+@keyframes water-wave { from { transform: translateX(0); } to { transform: translateX(30px); } }
+
+.water-info { flex: 1; min-width: 0; }
+.water-value { font-size: 30px; font-weight: 500; line-height: 1.1; }
+.water-value small { font-size: 14px; color: var(--kf-text-muted); margin-left: 2px; }
+
+.glasses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0; }
+.drop { display: grid; place-items: center; color: var(--kf-text-disabled); transition: color 0.4s; }
+.drop.on { color: var(--kf-brand); animation: pop 0.4s var(--kf-ease) both; }
+.drop.on svg { fill: currentColor; }
+
+.water-actions { display: flex; align-items: center; gap: 10px; }
+.water-minus {
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--kf-tint);
+  color: var(--kf-text);
+}
+.water-minus:disabled { opacity: 0.4; cursor: default; }
+.water-add {
+  flex: 1;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--kf-radius-full);
+  background: var(--kf-info);
+  color: var(--kf-on-info);
+  font-weight: 700;
+  transition: transform 0.2s var(--kf-ease);
+}
+.water-add:active { transform: scale(0.97); }
+
+/* Barra de lo que falta para la meta, debajo del vaso */
+.remain { margin-top: 16px; }
+.remain-top { display: flex; justify-content: space-between; align-items: baseline; font-size: 15px; color: var(--kf-text-secondary); margin-bottom: 8px; }
+.remain-top b { color: var(--kf-brand); font-weight: 700; font-size: 16px; }
+.remain-track { height: 12px; border-radius: var(--kf-radius-full); background: var(--kf-track); overflow: hidden; }
+.remain-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--kf-sky), var(--kf-blue));
+  transition: width 0.9s var(--kf-ease);
+}
+.remain-track span.done { background: linear-gradient(90deg, var(--kf-lime), var(--kf-green)); }
+
+.amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.amount {
+  height: 40px;
+  border-radius: var(--kf-radius-full);
+  background: var(--kf-tint);
+  color: var(--kf-text-secondary);
+  font-weight: 600;
+  transition: background-color 0.25s, color 0.25s;
+}
+.amount.on { background: var(--kf-info); color: var(--kf-on-info); }
+
+/* Botón grande de confirmar recordatorio */
+.remind-btn {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 70px;
+  margin-top: 14px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 22px;
+  background: var(--kf-brand);
+  color: var(--kf-on-brand);
+  text-align: left;
+  box-shadow: 0 14px 26px -14px color-mix(in srgb, var(--kf-brand) 80%, transparent);
+  transition: transform 0.2s var(--kf-ease);
+}
+.remind-btn:active { transform: scale(0.98); }
+.remind-icon {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--kf-white) 22%, transparent);
+  position: relative;
+  z-index: 1;
+}
+.remind-icon.bounce { animation: remind-bounce 0.6s var(--kf-ease) both; }
+.remind-text { display: flex; flex-direction: column; position: relative; z-index: 1; }
+.remind-text b { font-size: 18px; font-weight: 700; }
+.remind-text small { font-size: 13px; opacity: 0.85; margin-top: 2px; }
+.remind-ripple {
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  margin-left: -12px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--kf-white) 45%, transparent);
+  animation: remind-ripple 0.7s ease-out both;
+}
+@keyframes remind-bounce {
+  0% { transform: scale(1) rotate(0); }
+  30% { transform: scale(1.28) rotate(-8deg); }
+  55% { transform: scale(0.92) rotate(4deg); }
+  80% { transform: scale(1.06) rotate(0); }
+  100% { transform: scale(1) rotate(0); }
+}
+@keyframes remind-ripple {
+  from { transform: scale(0.4); opacity: 0.9; }
+  to { transform: scale(12); opacity: 0; }
+}
+
+/* Tomas del día */
+.intakes-card { padding: 14px 16px; }
+.intakes-title { font-size: 14px; color: var(--kf-text-muted); margin-bottom: 8px; }
+.intakes { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.intakes li { display: flex; align-items: center; gap: 10px; font-size: 15px; animation: enter 0.4s var(--kf-ease) both; }
+.intakes li svg { color: var(--kf-brand); flex: none; }
+.intakes li span { flex: 1; color: var(--kf-text-muted); }
+
+/* Medidor de consumo, al final de Hoy */
+.water-score { display: flex; justify-content: center; margin: 16px 0 4px; }
+.water-score .gauge-unit { font-size: 26px; margin-left: 4px; font-weight: 500; color: var(--kf-text-muted); -webkit-text-fill-color: currentColor; }

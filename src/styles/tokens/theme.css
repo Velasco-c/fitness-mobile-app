@@ -1,0 +1,166 @@
+/*
+ * KidFit · Tokens semánticos (tema claro y oscuro)
+ *
+ * Los componentes usan SOLO estos nombres. Para cambiar un color de la app,
+ * cambia el token aquí, nunca el valor dentro del componente.
+ * Los valores apuntan a palette.css: no escribas hex en este archivo.
+ *
+ * Activación del tema:
+ *   - Por defecto: sigue el sistema (prefers-color-scheme).
+ *   - Forzar claro:  <html data-theme="light">
+ *   - Forzar oscuro: <html data-theme="dark">
+ *
+ * Tema claro: celestes sobre blanco, con los acentos de los mockups.
+ * Tema oscuro: derivado, sin cambios respecto a la versión anterior.
+ */
+
+/* ---------- Tema claro ---------- */
+:root,
+:root[data-theme="light"] {
+  /* Fondos y superficies: celeste muy claro, tarjetas blancas */
+  --kf-bg: var(--kf-sky-50);
+  --kf-bg-subtle: var(--kf-sky-100);
+  --kf-surface: var(--kf-white);
+  --kf-border: var(--kf-sky-200);
+  --kf-border-subtle: var(--kf-sky-100);
+  --kf-track: var(--kf-sky-200);
+  --kf-tint: color-mix(in srgb, var(--kf-sky-700) 10%, transparent);
+  --kf-page-top: var(--kf-white);
+  --kf-page-bottom: var(--kf-sky-200);
+
+  /* Texto */
+  --kf-text: var(--kf-gray-600);
+  --kf-text-secondary: var(--kf-gray-500);
+  --kf-text-muted: var(--kf-gray-400);
+  --kf-text-disabled: var(--kf-gray-300);
+  --kf-text-inverse: var(--kf-white);
+
+  /* Marca */
+  --kf-brand: var(--kf-blue);
+  --kf-brand-ink: var(--kf-navy);
+  --kf-on-brand: var(--kf-white);
+
+  /* Estados */
+  --kf-success: var(--kf-green);
+  --kf-on-success: var(--kf-navy);
+  --kf-warning: var(--kf-orange);
+  --kf-on-warning: var(--kf-navy);
+  --kf-danger: var(--kf-red);
+  --kf-on-danger: var(--kf-white);
+  --kf-info: var(--kf-sky);
+  --kf-on-info: var(--kf-navy);
+
+  /* Superficies translúcidas (barra inferior y botones de vidrio) */
+  --kf-glass: color-mix(in srgb, var(--kf-white) 72%, transparent);
+  --kf-glass-border: color-mix(in srgb, var(--kf-sky-700) 14%, transparent);
+
+  /* Acceso, intro y bandas celestes */
+  --kf-hero-top: color-mix(in srgb, var(--kf-orange) 10%, var(--kf-white));
+  --kf-hero-bottom: var(--kf-sky-300);
+  --kf-logo-start: var(--kf-blue);
+  --kf-logo-end: var(--kf-sky);
+  --kf-sheet-head: var(--kf-sky-300);
+  --kf-sheet-head-ink: var(--kf-navy);
+  --kf-on-hero: var(--kf-white);
+
+  /* Tarjetas de color del dashboard */
+  --kf-tile-green: var(--kf-green);
+  --kf-tile-indigo: var(--kf-indigo);
+  --kf-tile-slate: var(--kf-slate);
+}
+
+/* ---------- Tema oscuro (sistema) ---------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --kf-bg: var(--kf-gray-600);
+    --kf-bg-subtle: var(--kf-gray-500);
+    --kf-surface: var(--kf-gray-500);
+    --kf-border: var(--kf-gray-400);
+    --kf-border-subtle: var(--kf-gray-500);
+    --kf-track: var(--kf-gray-500);
+    --kf-tint: color-mix(in srgb, var(--kf-white) 10%, transparent);
+    --kf-page-top: var(--kf-gray-600);
+    --kf-page-bottom: var(--kf-gray-600);
+
+    --kf-text: var(--kf-white);
+    --kf-text-secondary: var(--kf-gray-200);
+    --kf-text-muted: var(--kf-gray-300);
+    --kf-text-disabled: var(--kf-gray-400);
+    --kf-text-inverse: var(--kf-gray-600);
+
+    --kf-brand: var(--kf-sky);
+    --kf-brand-ink: var(--kf-sky);
+    --kf-on-brand: var(--kf-navy);
+
+    --kf-success: var(--kf-green);
+    --kf-on-success: var(--kf-navy);
+    --kf-warning: var(--kf-orange);
+    --kf-on-warning: var(--kf-navy);
+    --kf-danger: var(--kf-red);
+    --kf-on-danger: var(--kf-white);
+    --kf-info: var(--kf-sky);
+    --kf-on-info: var(--kf-navy);
+
+    --kf-glass: color-mix(in srgb, var(--kf-gray-600) 72%, transparent);
+    --kf-glass-border: color-mix(in srgb, var(--kf-white) 14%, transparent);
+
+    --kf-hero-top: color-mix(in srgb, var(--kf-navy) 45%, var(--kf-gray-600));
+    --kf-hero-bottom: var(--kf-gray-600);
+    --kf-logo-start: var(--kf-sky);
+    --kf-logo-end: var(--kf-blue);
+    --kf-sheet-head: var(--kf-gray-500);
+    --kf-sheet-head-ink: var(--kf-white);
+    --kf-on-hero: var(--kf-white);
+
+    --kf-tile-green: var(--kf-green);
+    --kf-tile-indigo: var(--kf-indigo);
+    --kf-tile-slate: var(--kf-slate);
+  }
+}
+
+/* ---------- Tema oscuro (forzado) ---------- */
+:root[data-theme="dark"] {
+  --kf-bg: var(--kf-gray-600);
+  --kf-bg-subtle: var(--kf-gray-500);
+  --kf-surface: var(--kf-gray-500);
+  --kf-border: var(--kf-gray-400);
+  --kf-border-subtle: var(--kf-gray-500);
+  --kf-track: var(--kf-gray-500);
+  --kf-tint: color-mix(in srgb, var(--kf-white) 10%, transparent);
+  --kf-page-top: var(--kf-gray-600);
+  --kf-page-bottom: var(--kf-gray-600);
+
+  --kf-text: var(--kf-white);
+  --kf-text-secondary: var(--kf-gray-200);
+  --kf-text-muted: var(--kf-gray-300);
+  --kf-text-disabled: var(--kf-gray-400);
+  --kf-text-inverse: var(--kf-gray-600);
+
+  --kf-brand: var(--kf-sky);
+  --kf-brand-ink: var(--kf-sky);
+  --kf-on-brand: var(--kf-navy);
+
+  --kf-success: var(--kf-green);
+  --kf-on-success: var(--kf-navy);
+  --kf-warning: var(--kf-orange);
+  --kf-on-warning: var(--kf-navy);
+  --kf-danger: var(--kf-red);
+  --kf-on-danger: var(--kf-white);
+  --kf-info: var(--kf-sky);
+  --kf-on-info: var(--kf-navy);
+
+  --kf-glass: color-mix(in srgb, var(--kf-gray-600) 72%, transparent);
+  --kf-glass-border: color-mix(in srgb, var(--kf-white) 14%, transparent);
+
+  --kf-hero-top: color-mix(in srgb, var(--kf-navy) 45%, var(--kf-gray-600));
+  --kf-hero-bottom: var(--kf-gray-600);
+  --kf-logo-start: var(--kf-sky);
+  --kf-logo-end: var(--kf-blue);
+  --kf-sheet-head: var(--kf-gray-500);
+  --kf-sheet-head-ink: var(--kf-white);
+  --kf-on-hero: var(--kf-white);
+
+  --kf-tile-green: var(--kf-green);
+  --kf-tile-indigo: var(--kf-indigo);
+  --kf-tile-slate: var(--kf-slate);
+}

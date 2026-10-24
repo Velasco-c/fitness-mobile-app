@@ -1,0 +1,21 @@
+{
+  "photo": "img/profile.png",
+  "stars": 5,
+  "streak": 3,
+  "activeDays": [-2, -1, 0],
+  "achievements": [
+    { "id": "l1", "title": "Primer nivel", "detail": "Completaste tu primer nivel.", "tone": "gray", "unlocked": true },
+    { "id": "l2", "title": "Racha de 3", "detail": "Entrenaste 3 días seguidos.", "tone": "navy", "unlocked": true },
+    { "id": "l3", "title": "Agua pura", "detail": "Cumpliste tu meta de agua del día.", "tone": "teal", "unlocked": false },
+    { "id": "l4", "title": "Estrella doble", "detail": "Ganaste 2 estrellas en un nivel.", "tone": "red", "unlocked": true },
+    { "id": "l5", "title": "Sin pausas", "detail": "Completa 3 niveles sin pausa.", "tone": "pink", "unlocked": false }
+  ],
+  "avatars": [
+    { "id": "a1", "tone": "sky" },
+    { "id": "a2", "tone": "indigo" },
+    { "id": "a3", "tone": "teal" },
+    { "id": "a4", "tone": "red" },
+    { "id": "a5", "tone": "pink" },
+    { "id": "a6", "tone": "green" }
+  ]
+}

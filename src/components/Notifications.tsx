@@ -29,26 +29,38 @@ function Toast({ item, onDone }: { item: AppNotification; onDone: (id: string) =
   );
 }
 
-/** Panel deslizable con el historial de notificaciones (abre la campana). */
+/** Panel de notificaciones (estilo notificaciones+.png): cabecera celeste y lista con iconos de color. */
 export function NotificationPanel() {
   const { panelOpen, setPanelOpen, notifications, markAllRead, unread } = useApp();
   return (
     <aside className={`sheet notif-sheet ${panelOpen ? 'open' : ''}`} aria-hidden={!panelOpen}>
-      <header className="screen-head">
-        <h2>Notifications</h2>
-        <button className="icon-btn" onClick={() => setPanelOpen(false)} aria-label="Close">
-          <Icon name="close" />
-        </button>
+      <header className="notif-head">
+        <div className="notif-top">
+          <button className="notif-round" onClick={() => setPanelOpen(false)} aria-label="Cerrar">
+            <Icon name="chevron" className="flip" size={20} />
+          </button>
+          <h2>Notificaciones</h2>
+          <span className="notif-round notif-round-static" aria-hidden="true">
+            <Icon name="bell" size={18} />
+          </span>
+        </div>
+        <div className="notif-meta">
+          <span>{unread} sin leer</span>
+          <button className="notif-link" onClick={markAllRead}>Marcar todo como leído</button>
+        </div>
       </header>
-      <div className="notif-actions">
-        <span className="muted">{unread} unread</span>
-        <button className="link-btn" onClick={markAllRead}>Mark all as read</button>
-      </div>
+
+      <h3 className="notif-title">Todas</h3>
       <ul className="notif-list">
         {notifications.map(n => (
-          <li key={n.id} className={`notif ${n.read ? '' : 'unread'} ${n.tone ?? ''}`}>
-            <b>{n.title}</b>
-            <p>{n.body}</p>
+          <li key={n.id} className={`notif ${n.read ? '' : 'unread'}`}>
+            <span className={`notif-icon ${n.tone ?? ''}`}>
+              <Icon name={n.icon ?? 'bell'} size={20} />
+            </span>
+            <div className="notif-body">
+              <b>{n.title}</b>
+              <p>{n.body}</p>
+            </div>
             <small>{n.time}</small>
           </li>
         ))}
